@@ -37,6 +37,9 @@ module.exports.sockets = {
   onDisconnect: function(session, socket) {
 
     // By default: do nothing.
+	Test.destroy({socket:socket.id}).exec(function deleteCB(err){
+		console.log("Test model deleted");
+	});
   },
 
 
