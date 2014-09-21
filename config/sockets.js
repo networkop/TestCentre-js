@@ -40,6 +40,10 @@ module.exports.sockets = {
 	Test.destroy({socket:socket.id}).exec(function deleteCB(err){
 		console.log("Test model deleted");
 	});
+	// temp workaround delete all sockets
+	Test.destroy({}).exec(function deleteCB(err){
+		console.log("All Test model deleted");
+	});
   },
 
 

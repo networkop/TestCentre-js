@@ -1,26 +1,37 @@
 
 <div class="container">
   <h3>Testing</h3>
+	
+		<div class="col-md-5 ">
+		<table class='table' id="table">
+			<thead>
+				<tr>
+					<th></th>
+					<th>Source</th>
+					<th>Ping</th>
+					<th>Traceroute</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><a href="#" id='addRow'>Add</a></td>
+					<td><%- partial ('addDropDownMenu.ejs', {roles: 'source'}) %></td>
+					<td columnspan=2><%- partial ('addDropDownMenu.ejs', {roles: 'destination'}) %></td>
 
-  <table class='table'>
-    <tr>
-	  <th>Source</th>
-	  <th>Ping</th>
-	  <th>Traceroute</th>
-	  <th>Output</th>
-	</tr>
+				</tr>
 
-	<tr>
+			</tbody>
+		</table>
+		</div>
+	
+		<div class="col-md-7">
+		<div class="btn-group btn-group-justified btn-group-md ">
+			<a href="#" class='btn btn-default' role='button' id="outputBreak">Break</a>
+			<a href="#" class='btn btn-default' role='button' id="outputSave">Save</a>
+			<a href="#" class='btn btn-default' role='button' id="outputClear">Clear</a>
+			
+		</div>
+		<textarea id='outputArea' rows="30" class="well well-sm outputAreaClass"></textarea>
+		</div>
 
-	  <td>From</td>
-	  <td><a href="/test/ping" id='commandButton'>Ping</a></td>
-	  <td><a href="/test/trace" id='commandButton'>Traceroute</a</td>
-	  <td><textarea rows="30" cols="150" rowspan=99 id='outputArea'>#</textarea></td>
-	  
-
-	  
-	</tr>
-
-
-  </table>
  </div>

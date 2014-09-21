@@ -35,6 +35,11 @@ module.exports.routes = {
   '/': {
     view: 'static/index'
   },
+  
+  '/device/:sourceID/:command/:destinationID': {
+	controller: "Device",
+	action: "command"
+  }
 
   /***************************************************************************
   *                                                                          *
