@@ -3,28 +3,30 @@
   <h3>Testing</h3>
 	
 		<div class="col-md-5 ">
-		<table class='table' id="table">
+		<div class="btn-group btn-group-md btn-group-justified">
+			<div class="btn-group">
+				<a href="#" class='btn btn-default' type="button" id='addRow'><span class='glyphicon glyphicon-plus'></span> Add</a>
+			</div>
+			<%- partial ('addDropDownMenu.ejs', {roles: 'source'}) %>
+			<%- partial ('addDropDownMenu.ejs', {roles: 'destination'}) %>
+		</div>
+		<table class='table table-striped' id="table">
 			<thead>
 				<tr>
-					<th></th>
-					<th>Source</th>
-					<th>Ping</th>
-					<th>Traceroute</th>
+					<th class="col-md-1"></th>
+					<th class="col-md-3">Source</th>
+					<th class="col-md-3">Ping</th>
+					<th class="col-md-3">Traceroute</th>
 				</tr>
 			</thead>
 			<tbody>
-				<tr>
-					<td><a href="#" id='addRow'>Add</a></td>
-					<td><%- partial ('addDropDownMenu.ejs', {roles: 'source'}) %></td>
-					<td columnspan=2><%- partial ('addDropDownMenu.ejs', {roles: 'destination'}) %></td>
 
-				</tr>
 
 			</tbody>
 		</table>
 		</div>
 	
-		<div class="col-md-7">
+		<div class="col-md-7 content-right">
 		<div class="btn-group btn-group-justified btn-group-md ">
 			<a href="#" class='btn btn-default' role='button' id="outputBreak">Break</a>
 			<a href="#" class='btn btn-default' role='button' id="outputSave">Save</a>

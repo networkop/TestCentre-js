@@ -53,7 +53,7 @@ $('#table').on('click', 'a.deleteRow', function(){
 $('.selectDevice').on('click', function(){
 	console.log('selected device');
 	var selectedOption = $(this);
-	var defaultOption = $(this).closest("div.dropdown").find("button.dropdown-toggle");
+	var defaultOption = $(this).closest("div.btn-group").find("button.dropdown-toggle");
 	defaultOption.html(selectedOption.text() + '   ' + '<span class="caret"></span>');
 	var roleID = selectedOption.attr('id');
 	var deviceID = selectedOption.attr('href').split("/")[1];
@@ -66,13 +66,14 @@ $('.selectDevice').on('click', function(){
 
 $('#addRow').on('click', function(){
 	$('#table tr:last').after(addTableRow());
+	return false;
 });
 
 var addTableRow = function() {
 	sourceObj = JSON.parse(localStorage.getItem('source'));
 	destObj = JSON.parse(localStorage.getItem('destination'));
 	html = '<tr>'
-	html += "<td><a href='#' class='deleteRow'>Delete</a></td>";
+	html += "<td><a href='#' class='deleteRow'><span class='glyphicon glyphicon-remove-circle'></span></a></td>";
 	html += "<td>" + sourceObj[1] + "</td>";
 	html += "<td><a href='/device/" + sourceObj[0] + "/ping/" + destObj[0] + "' class='commandButton'>" + destObj[1] + "</a></td>"
 	html += "<td><a href='/device/" + sourceObj[0] + "/trace/" + destObj[0] + "' class='commandButton'>" + destObj[1] + "</a></td>"
