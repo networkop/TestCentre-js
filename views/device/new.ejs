@@ -1,0 +1,22 @@
+<form action="/device/create" method="POST" class="form-signin" id="sign-up-form">
+	<h2 class="form-signin-heading">Create a device </h2>
+	
+	<% if(flash && flash.err) {%>
+	<ul class="alert alert-success">
+	<% Object.keys(flash.err).forEach(function(error) {%>
+	<li><%- JSON.stringify(flash.err[error]) %></li>
+	<% }) %>
+	<% } %>
+	
+	<input type="text" class="form-control" placeholder="device name" name="hostname">
+
+	<input type="text" class="form-control" placeholder="ip address" name="ipaddress">
+	
+	<input type="text" class="form-control" placeholder="country" name="country">
+	
+	<input type="text" class="form-control" placeholder="region" name="region">
+	<br/>
+	
+	<input type="submit" class="btn btn-lg btn-primary btn-block" value="Create Device"/>
+	<input type="hidden" name="_csrf" value="<%= _csrf %>" />
+</form>

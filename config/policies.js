@@ -35,6 +35,9 @@ module.exports.policies = {
 		edit: "userCanSeeProfile",
 		update: "userCanSeeProfile",
 		'*': "admin"
+	},
+	TestController: {
+		'*': "userCanSeeProfile"
 	}
 
   /***************************************************************************

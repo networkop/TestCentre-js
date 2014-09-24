@@ -1,0 +1,9 @@
+<form action="/device/update/<%= device.id %>" method="POST" class="form-signin">
+  <h2> Editing user </h2>
+  
+  <input value="<%= device.hostname %>" name="hostname" type="text" class="form-control"/>
+  <input value="<%= device.ipaddress %>" name="ipaddress" type="text" class="form-control"/>
+  
+  <input type="submit" value="Proceed" class="btn btn-lg btn-primary btn-block"/>
+  <input type="hidden" name="_csrf" value="<%= _csrf %>" />
+</form>

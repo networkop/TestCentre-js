@@ -1,0 +1,32 @@
+<div class="container">
+  <h3>Devices</h3>
+  <table class='table'>
+    <tr>
+	  <th>Hostname</th>
+	  <th>IP Address</th>
+	  <th>Country</th>
+	  <th>Region</th>
+	  <th></th>
+	  <th></th>
+	  <th></th>
+	</tr>
+	<% _.each(devices, function(device) { %>
+	<tr data-id="<%= device.id %>" data-model="user">
+	  <td><%= device.hostname %></td>
+	  <td><%= device.ipaddress %></td>
+	  <td><%= device.country %></td>
+	  <td><%= device.region %></td>
+	  <td><a href="/device/show/<%= device.id %>" class="btn btn-sm btn-primary">Show</a></td>
+	  <td><a href="/device/edit/<%= device.id %>" class="btn btn-sm btn-warning">Edit</a></td>
+	  <td><form action="device/<%= device.id %>" method="POST">
+	    <input type="hidden" name="_method" value="delete"/>
+		<input type="submit" class="btn btn-sm btn-danger" value="Delete" />
+		<input type="hidden" name="_csrf" value="<%= _csrf %>" />
+	  </form></td>
+	  
+	</tr>
+	<% }) %>
+  </table>
+  <a href="device/new" class="btn btn-lg btn-success"> Add a new device</a>
+ </div>
+	
