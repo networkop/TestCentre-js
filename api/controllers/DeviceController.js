@@ -21,7 +21,11 @@ module.exports = {
 
 		Test.findOne({socket:req.socket.id}).exec(function findOneCB(err,found){
 			if (err) return next(err);
-			connection.to(sourceIP, 'ssh', req.param('command') + " " + destIP, found.id);
+			try {
+				connection.to(sourceIP, 'ssh', req.param('command') + " " + destIP, found.id);
+			} catch(error) {
+				Test.publishUpdate(outputUserID, { output: JSON.stringify(error) });
+			}
 		});		
 		return res.send(200);
 	},

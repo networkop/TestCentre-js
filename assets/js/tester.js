@@ -1,12 +1,27 @@
 io.socket.get('/test/subscribe', function (data) { console.log(data); });
 io.socket.on('test', function (socketEvent){ 
 	console.log(socketEvent); 
-	updateOutput(socketEvent.data.output);
+	if (socketEvent.data.output) updateOutput(socketEvent.data.output);
+	else if (socketEvent.data.error) updateErrors(socketEvent.data.error);
 	});
 var updateOutput = function(textToAdd) {
 	var outputArea = $('#outputArea');
 	outputArea.val(outputArea.val() + textToAdd);
 	outputArea.scrollTop(outputArea[0].scrollHeight);
+};
+var updateErrors = function(errorObj) {
+	var outputArea = $('#outputArea');
+	outputArea.val(outputArea.val() + "\nerror " + JSON.stringify(errorObj));
+	outputArea.scrollTop(outputArea[0].scrollHeight);
+	switch (errorObj.reason) {
+		case 'authentication':
+			$.prompt("Hello World!");
+			break;
+		case 'connection-timeout':
+			break
+		default:
+			break;
+		}
 };
 
 $('#table').on('click', 'a.commandButton', function(){
