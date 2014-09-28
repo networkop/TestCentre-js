@@ -9,9 +9,9 @@ var connection = require('connect-network-device');
 module.exports = {
 	
 	command: function(req, res, next) {
-
+		var credentials = req.body;
 		Device.findOneById(req.param('sourceID'),function findOneCB(err, found){
-			if (err) return next(err);
+			if (!found || err) return next(err);
 			sourceIP = found.ipaddress;
 		});
 		Device.findOneById(req.param('destinationID'), function findOneCB(err, found){
@@ -20,11 +20,11 @@ module.exports = {
 		});
 
 		Test.findOne({socket:req.socket.id}).exec(function findOneCB(err,found){
-			if (err) return next(err);
+			if (!found || err) return next(err);
 			try {
-				connection.to(sourceIP, 'ssh', req.param('command') + " " + destIP, found.id);
+				connection.to(sourceIP, 'ssh', req.param('command') + " " + destIP, found.id, credentials);
 			} catch(error) {
-				Test.publishUpdate(outputUserID, { output: JSON.stringify(error) });
+				Test.publishUpdate(found.id, { output: JSON.stringify(error) });
 			}
 		});		
 		return res.send(200);

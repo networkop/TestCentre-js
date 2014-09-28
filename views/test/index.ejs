@@ -1,4 +1,23 @@
-
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="modalLoginSmall" aria-hidden="true" id='myModal'>
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content">
+				<form action="#" method="POST" class="login-form" id="login-form" >
+					<h4 >Device login</h4>
+					<input style="display:none" type="text" name="fakeusernameremembered"/><!-- Prevent form autocompletion -->
+					<input style="display:none" type="password" name="fakepasswordremembered"/><!-- Prevent form autocompletion -->
+					<span style="display:none"  id='deviceID'/></span><!-- Store Device IP for persistence -->
+					<input type="text" class="form-control" placeholder="username" name="login_username">
+					<input type="password" class="form-control" placeholder="password" name="login_password" id="login_password">
+					<label class="checkbox text-right"><input type="checkbox" name="defaultlogin" id="isDefaultCheckbox">default for customer</label>
+					<div class="text-right">					
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						<button type="submit" class="btn btn-primary" id='submitDeviceLogin'>Save</button>
+					</div><!-- form.footer -->
+				</form>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+	
 <div class="container">
   <h3>Testing</h3>
 	
@@ -20,8 +39,6 @@
 				</tr>
 			</thead>
 			<tbody>
-
-
 			</tbody>
 		</table>
 		</div>
@@ -31,9 +48,8 @@
 			<a href="#" class='btn btn-default' role='button' id="outputBreak">Break</a>
 			<a href="#" class='btn btn-default' role='button' id="outputSave">Save</a>
 			<a href="#" class='btn btn-default' role='button' id="outputClear">Clear</a>
-			
 		</div>
 		<textarea id='outputArea' rows="30" class="well well-sm outputAreaClass"></textarea>
 		</div>
-
+	
  </div>

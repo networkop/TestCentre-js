@@ -15,7 +15,8 @@ var updateErrors = function(errorObj) {
 	outputArea.scrollTop(outputArea[0].scrollHeight);
 	switch (errorObj.reason) {
 		case 'authentication':
-			$.prompt("Hello World!");
+			$('.modal #deviceID').val({ device: errorObj.device });
+			$('#myModal').modal('show');
 			break;
 		case 'connection-timeout':
 			break
@@ -24,11 +25,17 @@ var updateErrors = function(errorObj) {
 		}
 };
 
+var passwordPrompt = function popupwindow(url, title, w, h) {
+  var left = (screen.width/2)-(w/2);
+  var top = (screen.height/2)-(h/2);
+  return window.open(url, title, 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width='+w+', height='+h+', top='+top+', left='+left);
+} 
 $('#table').on('click', 'a.commandButton', function(){
 	console.log('clicked button');
 	console.log($(this).attr('href'));
 	var href = $(this).attr('href');
-	io.socket.post(href, function(event) {console.log(event)});
+	var loginCredentials = sessionPersistFind('default','loginData') || {};
+	io.socket.post(href, loginCredentials, function(event) {console.log(event)});
 	return false;
 });
 
@@ -37,7 +44,7 @@ $('#outputClear').on('click', function(){
 	return false;
 });
 
-$('#outputSave').on('click', function(){
+$('#outputSave').on('click', function() {
 	var textToWrite = $('#outputArea').val();
 	var textToWrite = textToWrite.replace(new RegExp(String.fromCharCode(10), 'g'), '\r\n'); 
 	var textFileAsBlob = new Blob([textToWrite], {type:'text/plain'}); 
@@ -94,5 +101,31 @@ var addTableRow = function() {
 	html += "<td><a href='/device/" + sourceObj[0] + "/trace/" + destObj[0] + "' class='commandButton'>" + destObj[1] + "</a></td>"
 	html += '</tr>'
 	return html;
-}
+};
+
+$('#submitDeviceLogin').on('click', function (){
+	console.log("Login entered");
+	var device =$('#login-form').find('#deviceID').val().device;
+	var checkbox = $('#login-form').find('#isDefaultCheckbox').is(':checked');
+	var saveFor = checkbox ? 'default' : device;
+	var saveData = {}
+	saveData[saveFor] = {
+			login: $('#login-form').find('input[name="login_username"]').val(),
+			password: $('#login-form').find('input[name="login_password"]').val()
+		}
+	sessionPersistSave(saveData,'loginData');
+	$('#myModal').modal('toggle');
+	return false;
+});
+
+var sessionPersistSave = function(myObject,dataType) {
+	sessionStorage[dataType] = JSON.stringify(myObject);
+};
+
+var sessionPersistFind = function(objectToFind, dataType) {
+	if (sessionStorage.length > 0) {
+		var myObject = JSON.parse(sessionStorage[dataType]);
+		return myObject[objectToFind];
+	}
+};
 
