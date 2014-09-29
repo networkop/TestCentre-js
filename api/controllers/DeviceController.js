@@ -4,15 +4,20 @@
  * @description :: Server-side logic for managing devices
  * @help        :: See http://links.sailsjs.org/docs/controllers
  */
-var connection = require('connect-network-device');
+
 
 module.exports = {
 	
 	command: function(req, res, next) {
 		var credentials = req.body;
+		var sourceDevice, destIP;
 		Device.findOneById(req.param('sourceID'),function findOneCB(err, found){
 			if (!found || err) return next(err);
-			sourceIP = found.ipaddress;
+			sourceDevice = {
+				hostname: found.hostname, 
+				ipaddress: found.ipaddress,
+				id: found.id
+			};
 		});
 		Device.findOneById(req.param('destinationID'), function findOneCB(err, found){
 			if (err) return next(err);
@@ -22,8 +27,9 @@ module.exports = {
 		Test.findOne({socket:req.socket.id}).exec(function findOneCB(err,found){
 			if (!found || err) return next(err);
 			try {
-				connection.to(sourceIP, 'ssh', req.param('command') + " " + destIP, found.id, credentials);
+				ConnectionManager.to(sourceDevice, 'ssh', req.param('command') + " " + destIP, found.id, credentials);
 			} catch(error) {
+				console.log("ERROR!! " + error );
 				Test.publishUpdate(found.id, { output: JSON.stringify(error) });
 			}
 		});		

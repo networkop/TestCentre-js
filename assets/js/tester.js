@@ -11,7 +11,7 @@ var updateOutput = function(textToAdd) {
 };
 var updateErrors = function(errorObj) {
 	var outputArea = $('#outputArea');
-	outputArea.val(outputArea.val() + "\nerror " + JSON.stringify(errorObj));
+	outputArea.val(outputArea.val() + "\nerror " + JSON.stringify(errorObj.text) + "\n");
 	outputArea.scrollTop(outputArea[0].scrollHeight);
 	switch (errorObj.reason) {
 		case 'authentication':
@@ -25,16 +25,14 @@ var updateErrors = function(errorObj) {
 		}
 };
 
-var passwordPrompt = function popupwindow(url, title, w, h) {
-  var left = (screen.width/2)-(w/2);
-  var top = (screen.height/2)-(h/2);
-  return window.open(url, title, 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width='+w+', height='+h+', top='+top+', left='+left);
-} 
+
 $('#table').on('click', 'a.commandButton', function(){
 	console.log('clicked button');
 	console.log($(this).attr('href'));
 	var href = $(this).attr('href');
-	var loginCredentials = sessionPersistFind('default','loginData') || {};
+	var deviceID = href.match(/\/\w+\/(\d+)\/\w+\/\d+/)['1'];
+	// Extract Login credentials for by either deviceID or default
+	var loginCredentials = sessionPersistFind(deviceID,'loginData') || sessionPersistFind('default','loginData') || {};
 	io.socket.post(href, loginCredentials, function(event) {console.log(event)});
 	return false;
 });
