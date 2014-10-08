@@ -1,5 +1,4 @@
 
-var connection = require('connect-network-device');
 
 module.exports = {
 
@@ -14,7 +13,7 @@ module.exports = {
 	break: function(req, res, next) {
 		Test.findOne({socket:req.socket.id}).exec(function findOneCB(err,found){
 			if (err) return next(err);
-			connection.abort(found.id);
+			ConnectionManager.abort(found.id);
 		});
 		return res.send(200);
 	},

@@ -63,7 +63,7 @@ module.exports = {
 			if (err) return next(err);
 		// if user is admin
 		if (req.session.User.admin) {
-		  res.redirect('/user');
+		  res.redirect('/');
 		  return;
 		}
 		

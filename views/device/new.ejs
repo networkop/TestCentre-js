@@ -7,16 +7,59 @@
 	<li><%- JSON.stringify(flash.err[error]) %></li>
 	<% }) %>
 	<% } %>
-	
-	<input type="text" class="form-control" placeholder="device name" name="hostname">
+	<div class="row">
+		<div class="col-xs-6">
+			<input type="text" class="form-control" placeholder="device name" name="hostname">
+		</div>
+		<div class="col-xs-6">
+			<input type="text" class="form-control" placeholder="ip address" name="ipaddress">
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-xs-6">	
+			<input type="text" class="form-control" placeholder="country" name="country">
+		</div>
+		<div class="col-xs-6">
+	<input type="text" class="form-control" placeholder="Site Name" name="sitename">
+		</div>
+	</div>
+	<div class="row ">
+		<div class="col-xs-6">	
+			<div class="btn-group ">
 
-	<input type="text" class="form-control" placeholder="ip address" name="ipaddress">
-	
-	<input type="text" class="form-control" placeholder="country" name="country">
-	
-	<input type="text" class="form-control" placeholder="region" name="region">
-	<br/>
-	
-	<input type="submit" class="btn btn-lg btn-primary btn-block" value="Create Device"/>
+					<button type="button" class="btn btn-default" data-toggle="dropdown">VRF</button>
+					<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+						<span class="caret"></span>
+						<span class="sr-only">Toggle Dropdown</span>
+					</button>
+					<ul class="dropdown-menu" role="menu">
+						<li><a href="#">NONE</a></li>
+					</ul>
+
+			</div>
+		</div>
+		<div class="col-xs-6">
+			<div class="btn-group btn-group-justified">
+				<div class="btn-group">
+					<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+						Transport <span class="caret text-right"></span>
+					</button>
+					<ul class="dropdown-menu" role="menu">
+						<li><a href="#">SSH</a></li>
+						<li><a href="#">Telnet</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	</br>
+	<div class="row">
+		<div class="col-xs-6">		
+			<input type="submit" class="btn btn-lg btn-primary btn-block" value="Create Device"/>
+		</div>
+		<div class="col-xs-6">
+			<input type="submit" class="btn btn-lg btn-success btn-block" value="Explore"/>
+		</div>
+	</div>
 	<input type="hidden" name="_csrf" value="<%= _csrf %>" />
 </form>

@@ -30,6 +30,11 @@ var jsFilesToInject = [
   'js/dependencies/**/*.js',
   'js/jquery.js',
   'js/jquery.validate.min.js',
+  'js/globals.js',
+  'js/test_output_control.js',
+  'js/test_command_buttons.js',
+  'js/login_modal.js',
+  'js/test_output.js',
   // All of the rest of your client-side js files
   // will be injected here in no particular order.
   'js/**/*.js'
