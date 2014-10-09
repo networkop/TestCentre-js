@@ -18,4 +18,10 @@ var sessionPersistFind = function(objectToFind, dataType) {
 		return  myObject ? myObject[objectToFind] : undefined;
 	}
 };
+var ipaddressValidateString = ['^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)',
+							  '\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$'].join('');
+							  
+jQuery.validator.addMethod("ipaddress", function(value, element) {
+  return this.optional(element) || RegExp(ipaddressValidateString).test(value);
+}, "Incorrect IP address"); 
 

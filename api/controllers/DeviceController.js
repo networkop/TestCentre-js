@@ -45,11 +45,14 @@ module.exports = {
 		});
 	},
 	
-	'new': function(req,res) {
-	res.view();
+	'new': function(req, res) {
+		return res.view('device/new', {
+			deviceData: {}
+		});
 	},
 	
 	create: function(req, res, next) {
+		console.log(req.params.all());
 		var deviceObj = req.params.all();
 		Device.create( deviceObj, function deviceCreated(err, device) {
 			if (err) {
@@ -64,6 +67,14 @@ module.exports = {
 			if (err) return next(err);
 			res.redirect('/device/show/'+device.id);
 			});
+		});
+	},
+	
+	explore: function(req, res, next) {
+		console.log(req.body.ipaddress);
+		var deviceXplored = DeviceXplore.explore(req.body.ipaddress);
+		return res.view('device/new', {
+			deviceData: deviceXplored
 		});
 	},
 	

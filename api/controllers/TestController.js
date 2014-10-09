@@ -18,9 +18,7 @@ module.exports = {
 		return res.send(200);
 	},
 	
-	subscribe: function(req, res) {
-		console.log('inside subscribe function ' );
-		console.log(req.socket.id);
+	subscribe: function(req, res, next) {
 		Test.findOne({id:req.socket.id}).exec(function findOneCB(err,found){
 			if (err) return next(err);
 			res.send(200);
