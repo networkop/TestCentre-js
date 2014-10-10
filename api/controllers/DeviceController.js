@@ -10,7 +10,10 @@ module.exports = {
 	
 	command: function(req, res, next) {
 		var credentials = req.body;
-		var sourceDevice, destIP;
+		var sourceDevice, destIP, socketBuffer;
+		//var socketBuffer = new SocketBuffer(req.socket.id, Test);
+		//Test.publishUpdate(req.socket.id, { output: 'websocket test'});
+		
 		Device.findOneById(req.param('sourceID'),function findOneCB(err, found){
 			if (!found || err) return next(err);
 			sourceDevice = {
@@ -26,11 +29,12 @@ module.exports = {
 
 		Test.findOne({socket:req.socket.id}).exec(function findOneCB(err,found){
 			if (!found || err) return next(err);
+			socketBuffer = new SocketBuffer(found.id, Test);
 			try {
-				ConnectionManager.to(sourceDevice, 'ssh', req.param('command') + " " + destIP, found.id, credentials);
+				ConnectionManager.to(sourceDevice, 'ssh', req.param('command') + " " + destIP, socketBuffer, credentials);
 			} catch(error) {
 				console.log("ERROR!! " + error );
-				Test.publishUpdate(found.id, { output: JSON.stringify(error) });
+				socketBuffer.write(JSON.stringify(error));
 			}
 		});		
 		return res.send(200);

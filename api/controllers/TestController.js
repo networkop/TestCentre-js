@@ -1,7 +1,7 @@
 
 
 module.exports = {
-
+	
 	index: function (req, res, next) {
 		Device.find({}).exec(function findCB(err, devices) {
 		res.view({
@@ -13,7 +13,7 @@ module.exports = {
 	break: function(req, res, next) {
 		Test.findOne({socket:req.socket.id}).exec(function findOneCB(err,found){
 			if (err) return next(err);
-			ConnectionManager.abort(found.id);
+			SocketBuffer.abort(found.id);
 		});
 		return res.send(200);
 	},

@@ -11,6 +11,7 @@
 		var deviceID = href.match(/\/\w+\/(\d+)\/\w+\/\d+/)['1'];
 		// Extract Login credentials for by either deviceID or default
 		var loginCredentials = sessionPersistFind(deviceID,'loginData') || sessionPersistFind('default','loginData') || {};
+		// Href is /device/:id/:command/:id
 		io.socket.post(href, loginCredentials, function(event) {console.log(event)});
 		return false;
 	},
