@@ -1,40 +1,37 @@
-function Buffer(outputUserID, model) {
-	this.id = outputUserID;
-	this.model = model;
-	
-	this.write = function(dataObj) {
-		this.model.publishUpdate(this.id, dataObj);
-	};
-}
-// Buffer.destroy = function(userID) {};
 
-module.exports = Buffer;
+// store all socket connections for all users
+var socketPool = {};
 
-
-/*
 module.exports = {
-	create: function(outputUserID) {
-		this.outputUserID = outputUserID;
-		console.log("initial userid = " + this.outputUserID);
+
+	create: function(userID, model) {
+		socketObj = new SocketObject(userID, model);
+		socketPool.userID = socketPool.userID || socketObj;
+		return socketObj;
 	},
-	write: function(dataObj) {
-		console.log("inside socket buffer " + dataObj);
-		console.log("userid = " + this.outputUserID);
-		Test.publishUpdate(this.outputUserID, dataObj);
-	},
-	associate: function(remoteConnection) {
-		connectionPool[this.outputUserID] = remoteConnection
-	},
-	abort: function(outputUserID) {	
-		if (typeof(connectionPool[this.outputUserID]) !== 'undefined') {
-			connectionPool[this.outputUserID].end();
-			delete connectionPool[this.outputUserID];
-		}
-	},
-	destroy: function(remoteConnection) {
-		if (typeof(connectionPool[this.outputUserID]) !== 'undefined') {
-			delete connectionPool[this.outputUserID];
+
+	abort: function(userID) {	
+		if (typeof socketPool.userID !== 'undefined') {
+			socketPool.userID.destroy();
 		}
 	}
 };
-*/
+
+function SocketObject(userID, model) {
+	this.userID = userID;
+	this.model = model;
+};
+
+SocketObject.prototype = {
+	constructor: SocketObject,
+	
+	write: function(dataText, dataType) {
+		var dataObj = {};
+		if (!dataType) dataType = 'output';
+		dataObj[dataType] = dataText;
+		this.model.publishUpdate(this.userID, dataObj);
+	},
+	destroy: function() {
+		delete socketPool.this.userID;
+	}
+}

@@ -1,5 +1,5 @@
 module.exports = function(req, res, next) {
-
+	if (!req.session.User) return;
 	var sessionUserMatchesId = req.session.User.id == req.param('id');
 	var isAdmin = req.session.User.admin;
 

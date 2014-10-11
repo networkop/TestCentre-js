@@ -2,24 +2,23 @@ var sshClient = require('ssh2');
 
 
 module.exports = {
-	to: function(remoteDevice, transport, command, socketBuffer, credentials) {
-		console.log("RemoteDevice = " + remoteDevice);
+	exec: function(remoteDevice, transport, command, outputBuffer, credentials) {
+		console.log("RemoteDevice = " + remoteDevice.ipaddress);
 		var message = '# Running ' + command + ' from ' + remoteDevice.ipaddress + ' via ' + transport + ' #';
+		outputBuffer.write(message);
 		console.log(message);
-		socketBuffer.write({ 
-			output: message 
-		});
-		switch (transport) {
+		switch (transport.toLowerCase()) {
 			case 'ssh': 
-				sshExecute(remoteDevice, command, socketBuffer, credentials);
+				sshExecute(remoteDevice, command, outputBuffer, credentials);
 				break;
 			default: 
-				sshExecute(remoteDevice, command, socketBuffer, credentials);
+				sshExecute(remoteDevice, command, outputBuffer, credentials);
 		}
-	}
+	},
+
 };
 
-var sshExecute = function (remoteDevice, command, socketBuffer, credentials) {
+var sshExecute = function (remoteDevice, command, outputBuffer, credentials) {
 	var username = credentials.login || 'fake';
 	var password = credentials.password || 'fake';
 	var conn = new sshClient();
@@ -30,31 +29,31 @@ var sshExecute = function (remoteDevice, command, socketBuffer, credentials) {
 			stream.on('exit', function(code, signal) {
 				console.log('Stream :: exit :: code: ' + code + ', signal: ' + signal);
 			}).on('close', function() {
-				socketBuffer.write({ output: '\nDONE\n'});
+				outputBuffer.write('\nDONE\n');
+				outputBuffer.destroy();
 				conn.end();
 			}).on('data', function(data) {
-				socketBuffer.write({ output: data + ''});
+				outputBuffer.write(data + '');
 			}).stderr.on('data', function(data) {
 				console.log('STDERR: ' + data);
+				outputBuffer.write(data + '');
 			});
 		});
 	});
 	conn.on('error', function(error) {
-		messageText = "Cannot connect to " + remoteDevice.ipaddress;
-		errorObject =  { 
-			error: {
-				reason: error.level,
-				text: messageText,
-				device: remoteDevice.id
-			}
+		var messageText = "Cannot connect to " + remoteDevice.ipaddress;
+		errorObj = {
+			reason: error.level,
+			text: messageText,
+			device: remoteDevice.id
 		};
-		socketBuffer.write(error)
+		outputBuffer.write(errorObj, 'error');
 	});
 	conn.connect({
 			host: remoteDevice.ipaddress,
 			port: 22,
-			username: 'mkashin',
-			password: 'MmgN3tw0rk007'
+			username: username,
+			password: password
 	});
 };
 

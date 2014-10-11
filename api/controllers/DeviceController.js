@@ -10,33 +10,26 @@ module.exports = {
 	
 	command: function(req, res, next) {
 		var credentials = req.body;
-		var sourceDevice, destIP, socketBuffer;
-		//var socketBuffer = new SocketBuffer(req.socket.id, Test);
-		//Test.publishUpdate(req.socket.id, { output: 'websocket test'});
-		
-		Device.findOneById(req.param('sourceID'),function findOneCB(err, found){
-			if (!found || err) return next(err);
-			sourceDevice = {
-				hostname: found.hostname, 
-				ipaddress: found.ipaddress,
-				id: found.id
-			};
-		});
-		Device.findOneById(req.param('destinationID'), function findOneCB(err, found){
-			if (err) return next(err);
-			destIP = found.ipaddress;
-		});
-
-		Test.findOne({socket:req.socket.id}).exec(function findOneCB(err,found){
-			if (!found || err) return next(err);
-			socketBuffer = new SocketBuffer(found.id, Test);
-			try {
-				ConnectionManager.to(sourceDevice, 'ssh', req.param('command') + " " + destIP, socketBuffer, credentials);
-			} catch(error) {
-				console.log("ERROR!! " + error );
-				socketBuffer.write(JSON.stringify(error));
-			}
-		});		
+		var sourceDevice, destDevice, remoteCommand;
+		// find source device by ID then destination device by ID, the find the UserID by the socket ID and execute remote command
+		Device.findOneById(req.param('sourceID'))
+		.then(function(sourceDevice){
+			var destDevice = Device.findOneById(req.param('destinationID'))
+				.then(function(destDevice){
+					return destDevice;
+			});
+			return [sourceDevice,destDevice];
+		}).spread(function(sourceDevice, destDevice) {
+			var remoteCommand = RemoteCommand.cisco(req.param('command'), sourceDevice, destDevice);
+			Test.findOne({socket:req.socket.id}).exec(function findOneCB(err,found){
+				if (!found || err) return next(err);
+				var socketObject = SocketBuffer.create(found.id, Test);
+				Connection.exec(sourceDevice, 'ssh', remoteCommand, socketObject, credentials);
+			})
+		}).catch(function(error) {
+			console.log("ERROR!! " + error );
+			SocketBuffer.write(found.id, JSON.stringify(error));
+		});	
 		return res.send(200);
 	},
 	
@@ -75,8 +68,12 @@ module.exports = {
 	},
 	
 	explore: function(req, res, next) {
-		console.log(req.body.ipaddress);
-		var deviceXplored = DeviceXplore.explore(req.body.ipaddress);
+		console.log(req.body);
+		var deviceCredentials = {
+			login: req.body.login,
+			password: req.body.password
+		};
+		var deviceXplored = DeviceXplore.explore(req.body.ipaddress, deviceCredentials, req.body.transport);
 		return res.view('device/new', {
 			deviceData: deviceXplored
 		});
