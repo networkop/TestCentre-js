@@ -10,6 +10,13 @@ Live demonstration available on [Youtube]
 ### Version
 1.0
 
+### Technologies
+* Javascript
+* Node.js
+* Sails.js
+* jQuery
+* Websockets
+
 ### Installation
 
 1. Download **dist** directory
